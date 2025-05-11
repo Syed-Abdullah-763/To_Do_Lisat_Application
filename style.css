@@ -14,7 +14,7 @@ html {
 main{
     height: 100vh;
     width: 100%;
-    background-color: #ffffff;
+    background-color:rgb(1, 2, 20);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,6 +23,7 @@ main{
 }
 h1 {
     font-size: 40px;
+    color: #fff;
 }
 
 .links {
@@ -51,6 +52,7 @@ h1 {
 }
 .links .signUp {
     color: #000;
+    color: #fff;
 
     &:hover {
         background-color: #0161c4;
@@ -97,7 +99,7 @@ h1 {
 }
 
 .form a {
-    font-size: 12px;
+    font-size: 14px;
 }
 
 #error {

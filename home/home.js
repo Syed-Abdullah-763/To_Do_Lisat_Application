@@ -10,16 +10,22 @@ function addTodo() {
 
   var todoData = localStorage.getItem("todos");
 
+  if(todoObj.value == "") {
+    return
+  }
+
   if (!todoData) {
     var arr = [todoObj];
     localStorage.setItem("todos", JSON.stringify(arr));
   } else {
     var todoArr = JSON.parse(localStorage.getItem("todos"));
 
-    todoArr.push(todoObj); // To add item on last index
-    // todoArr.unshift(todoObj)  // To add item on 0 index
+    // todoArr.push(todoObj); // To add item on last index
+    todoArr.unshift(todoObj)  // To add item on 0 index
     localStorage.setItem("todos", JSON.stringify(todoArr));
   }
+
+  todoInput.value = ""
 
   renderUI();
 }
@@ -86,4 +92,13 @@ function editVal(btn, index) {
     liElement.replaceChild(inputField, h4);
     btn.innerHTML = "Done";
   }
+}
+
+
+function clearAllTodos() {
+  var todoArr = JSON.parse(localStorage.getItem("todos"))
+
+  localStorage.removeItem("todos")
+
+  renderUI()
 }
