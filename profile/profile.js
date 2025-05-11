@@ -28,6 +28,7 @@ function updateUser() {
     }
 
     var userArr = JSON.parse(localStorage.getItem("users"))
+    var userlogin = JSON.parse(localStorage.getItem("userlogin"))
     var index;
 
     for(var i = 0; i < userArr.length; i++) {
@@ -38,6 +39,7 @@ function updateUser() {
 
     userArr[index] = updatedObj;
 
+    localStorage.setItem("userLogin", JSON.stringify(updatedObj))
     localStorage.setItem("users", JSON.stringify(userArr))
 }
 
