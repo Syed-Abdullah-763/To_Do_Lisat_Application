@@ -45,7 +45,8 @@ function signupHandler() {
       localStorage.setItem("userLogin",JSON.stringify(userObj))
       alert("LogIn Complete")
 
-      window.location.href = "../home/home.html";
+      // window.location.href = "../home/home.html";
+      window.location.replace("../home/home.html")
     }
   }
 
