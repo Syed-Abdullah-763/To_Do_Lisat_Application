@@ -45,5 +45,7 @@ function updateUser() {
 
 
 function logoutHandler() {
+    localStorage.removeItem("userLogin")
+
     window.location.href = "../index.html"
 }

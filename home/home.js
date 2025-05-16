@@ -3,15 +3,26 @@ function addTodo() {
 
   var userObj = JSON.parse(localStorage.getItem("userLogin"));
 
+  var newDate = new Date();
+  var hours = newDate.getHours();
+  var zone = "am";
+
+  if (hours >= 12) {
+    hours = hours - 12;
+    zone = "pm";
+  }
+
   var todoObj = {
     value: todoInput.value,
     email: userObj.email,
+    date: `${newDate.getDate()}-${newDate.getMonth()}-${newDate.getFullYear()}`,
+    time: `${hours}:${newDate.getMinutes()}${zone}`,
   };
 
   var todoData = localStorage.getItem("todos");
 
-  if(todoObj.value == "") {
-    return
+  if (todoObj.value == "") {
+    return;
   }
 
   if (!todoData) {
@@ -21,11 +32,11 @@ function addTodo() {
     var todoArr = JSON.parse(localStorage.getItem("todos"));
 
     // todoArr.push(todoObj); // To add item on last index
-    todoArr.unshift(todoObj)  // To add item on 0 index
+    todoArr.unshift(todoObj); // To add item on 0 index
     localStorage.setItem("todos", JSON.stringify(todoArr));
   }
 
-  todoInput.value = ""
+  todoInput.value = "";
 
   renderUI();
 }
@@ -44,6 +55,7 @@ function renderUI() {
     parent.innerHTML += `<li>
           <h4>${todoArr[i].value}</h4>
           <p>${todoArr[i].email}</p>
+          <p>(${todoArr[i].date}) ${todoArr[i].time}</p>
           <div class="btns">
             <button class="edit" onclick="editVal(this,${i})">Edit</button>
             <button class="delete" onclick="deleteval(${i})">Delete</button>
@@ -65,40 +77,58 @@ function editVal(btn, index) {
   var liElement = btn.parentElement.parentElement;
   var h4 = liElement.querySelector("h4");
 
-  if (btn.innerHTML == "Done") {
-    var todoArr = JSON.parse(localStorage.getItem("todos"));
-    var oldObj = todoArr[index];
-    var updatedObj = {
-      value: liElement.firstElementChild.value,
-      email: oldObj.email,
-    };
+  var todoArr = JSON.parse(localStorage.getItem("todos"));
+  var userLogin = JSON.parse(localStorage.getItem("userLogin"));
+  var oldObj = todoArr[index];
 
-    todoArr[index] = updatedObj
-    localStorage.setItem("todos", JSON.stringify(todoArr))
+  if (oldObj.email == userLogin.email) {
+    if (btn.innerHTML == "Done") {
+      var newDate = new Date();
+      var hours = newDate.getHours();
+      var zone = "am";
 
-    // create newh4
-    var newh4 = document.createElement("h4");
-    newh4.innerHTML = liElement.firstElementChild.value;
+      if (hours > 12) {
+        hours = hours - 12;
+        zone = "pm";
+      }
 
-    liElement.replaceChild(newh4, liElement.firstElementChild);
-    btn.innerHTML = "Edit";
+      var updatedObj = {
+        value: liElement.firstElementChild.value,
+        email: oldObj.email,
+        date: `${newDate.getDate()}-${newDate.getMonth()}-${newDate.getFullYear()}`,
+        time: `${hours}:${newDate.getMinutes()}${zone}`,
+      };
+
+      todoArr[index] = updatedObj;
+      localStorage.setItem("todos", JSON.stringify(todoArr));
+
+      // create newh4
+      var newh4 = document.createElement("h4");
+      newh4.innerHTML = liElement.firstElementChild.value;
+
+      renderUI();
+    } else {
+      // create Input Field
+      var inputField = document.createElement("input");
+      inputField.type = "text";
+      inputField.value = h4.innerHTML;
+      inputField.setAttribute("class", "inputField");
+
+      liElement.replaceChild(inputField, h4);
+      btn.innerHTML = "Done";
+    }
+
+    
   } else {
-    // create Input Field
-    var inputField = document.createElement("input");
-    inputField.type = "text";
-    inputField.value = h4.innerHTML;
-    inputField.setAttribute("class", "inputField");
 
-    liElement.replaceChild(inputField, h4);
-    btn.innerHTML = "Done";
+    return;
   }
 }
 
-
 function clearAllTodos() {
-  var todoArr = JSON.parse(localStorage.getItem("todos"))
+  var todoArr = JSON.parse(localStorage.getItem("todos"));
 
-  localStorage.removeItem("todos")
+  localStorage.removeItem("todos");
 
-  renderUI()
+  renderUI();
 }
